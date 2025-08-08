@@ -1,0 +1,13 @@
+/* Import Tailwind CSS */
+@import "https://cdn.tailwindcss.com";
+
+/* Custom Styles */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Style for the submit button when it's in a loading state */
+#submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}

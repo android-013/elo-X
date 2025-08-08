@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSmash - Full Rankings</title>
+    <!-- Link to your external CSS file -->
+    <link rel="stylesheet" href="ranking.css">
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 md:p-8">
+
+    <div class="w-full max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6">
+        <header class="text-center mb-6">
+            <h1 class="text-4xl md:text-5xl font-bold text-indigo-600">Leaderboard</h1>
+            <p class="text-gray-500 mt-2">The official player rankings.</p>
+        </header>
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="flex items-center justify-center my-10">
+            <svg class="animate-spin h-10 w-10 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+        </div>
+
+        <!-- Rankings Table -->
+        <div class="overflow-x-auto">
+            <table id="rankings-table" class="min-w-full divide-y divide-gray-200 hidden">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Player</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Points</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Record (W-L-D)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Played</th>
+                    </tr>
+                </thead>
+                <tbody id="rankings-body" class="bg-white divide-y divide-gray-200">
+                    <!-- Player rows will be injected here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <footer class="text-center mt-8">
+            <a href="./index.html" class="text-indigo-600 hover:underline">← Back to Voting</a>
+        </footer>
+    </div>
+
+    <!-- Link to your external JavaScript file -->
+    <script type="module" src="ranking.js"></script>
+</body>
+</html>

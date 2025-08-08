@@ -1,0 +1,24 @@
+/* Import Tailwind CSS */
+@import "https://cdn.tailwindcss.com";
+
+/* Custom Styles */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Style for the top 3 players */
+.rank-1, .rank-2, .rank-3 {
+    font-weight: 600; /* semibold */
+}
+
+.rank-1 td:first-child {
+    color: #d4af37; /* Gold */
+}
+
+.rank-2 td:first-child {
+    color: #c0c0c0; /* Silver */
+}
+
+.rank-3 td:first-child {
+    color: #cd7f32; /* Bronze */
+}

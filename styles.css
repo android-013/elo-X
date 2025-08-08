@@ -1,0 +1,24 @@
+/* Import Tailwind CSS */
+@import "https://cdn.tailwindcss.com";
+
+/* Custom Styles */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.player-card {
+    transition: all 0.3s ease-in-out;
+}
+
+.player-card.loading-state {
+    filter: blur(8px);
+    transform: scale(0.95);
+    opacity: 0.6;
+}
+
+.player-card:not(.loading-state):hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* You can add more custom CSS here if needed */

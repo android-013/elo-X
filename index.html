@@ -4,49 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UniSmash - Vote Now!</title>
-    <!-- Link to your external CSS file -->
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-gray-100 text-gray-800 flex items-center justify-center min-h-screen p-4">
-
-    <div class="w-full max-w-4xl mx-auto">
-        <header class="text-center mb-8">
-            <h1 class="text-4xl md:text-5xl font-bold text-indigo-600">UniSmash</h1>
-            <p class="text-gray-500 mt-2">Who's on top? Click to decide.</p>
+<body>
+    <div class="container">
+        <header>
+            <h1>elo-X</h1>
+            <p>Who's on top? Click to decide.</p>
         </header>
 
-        <main id="matchup-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 relative">
+        <main id="matchup-container">
             <!-- Loading Spinner -->
-            <div id="loading-spinner" class="hidden absolute inset-0 bg-white/50 backdrop-blur-sm z-20 flex items-center justify-center">
-                <svg class="animate-spin h-10 w-10 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
+            <div id="loading-spinner" class="hidden">
+                <div class="spinner"></div>
             </div>
 
             <!-- Player 1 Card -->
-            <div id="player1-card" class="player-card bg-white p-4 rounded-xl shadow-md flex flex-col items-center">
-                <img id="player1-img" src="https://placehold.co/400x400/E2E8F0/4A5568?text=Loading..." class="w-full h-auto object-cover rounded-lg aspect-square mb-4">
-                <h2 id="player1-name" class="text-center text-2xl font-semibold mb-4">Loading...</h2>
-                <button id="player1-vote-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">Vote for Player 1</button>
+            <div class="player-card" id="player1-card">
+                <img id="player1-img" src="https://placehold.co/400x400/E2E8F0/4A5568?text=Loading..." alt="Player 1">
+                <h2 id="player1-name">Loading...</h2>
+                <button id="player1-vote-btn" class="vote-btn blue">Vote for Player 1</button>
             </div>
 
             <!-- Player 2 Card -->
-            <div id="player2-card" class="player-card bg-white p-4 rounded-xl shadow-md flex flex-col items-center">
-                <img id="player2-img" src="https://placehold.co/400x400/E2E8F0/4A5568?text=Loading..." class="w-full h-auto object-cover rounded-lg aspect-square mb-4">
-                <h2 id="player2-name" class="text-center text-2xl font-semibold mb-4">Loading...</h2>
-                <button id="player2-vote-btn" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">Vote for Player 2</button>
+            <div class="player-card" id="player2-card">
+                <img id="player2-img" src="https://placehold.co/400x400/E2E8F0/4A5568?text=Loading..." alt="Player 2">
+                <h2 id="player2-name">Loading...</h2>
+                <button id="player2-vote-btn" class="vote-btn green">Vote for Player 2</button>
             </div>
         </main>
 
-        <footer class="text-center mt-8">
-            <button id="draw-vote-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">It's a Draw</button>
-            <p class="mt-4"><a href="./ranking.html" class="text-indigo-600 hover:underline">View Full Rankings</a></p>
+        <footer>
+            <button id="draw-vote-btn" class="vote-btn gray">It's a Draw</button>
+            <p><a href="./ranking.html">View Full Rankings</a></p>
         </footer>
     </div>
 
-    <!-- Link to your external JavaScript file -->
-    <!-- The `type="module"` is important for using `import` -->
     <script type="module" src="script.js"></script>
 </body>
 </html>

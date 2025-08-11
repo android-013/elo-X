@@ -75,25 +75,19 @@ async function handleVote(winner, loser, isDraw = false) {
     if (!winner || !loser) return;
     setLoadingState(true);
 
-    try {
-        const { data, error } = await supabase.functions.invoke('update-ratings', {
-            body: JSON.stringify({
-                winnerId: winner.id,
-                loserId: loser.id,
-                isDraw
-            }),
-            headers: { "Content-Type": "application/json" }
-        });
+    const { error } = await supabase.rpc("update_elo", {
+        winner_id: winner.id,
+        loser_id: loser.id,
+        is_draw: isDraw
+    });
 
-        if (error) throw error;
-
-        console.log('Vote successful:', data);
-        await fetchTwoRandomPlayers();
-
-    } catch (error) {
-        console.error('Error voting:', error);
+    if (error) {
+        console.error(error);
         alert(`An error occurred while voting: ${error.message}`);
         setLoadingState(false);
+    } else {
+        console.log("Elo updated");
+        await fetchTwoRandomPlayers();
     }
 }
 

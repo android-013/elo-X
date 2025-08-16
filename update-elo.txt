@@ -1,0 +1,71 @@
+create or replace function update_elo(
+  winner_id bigint,
+  loser_id bigint,
+  is_draw boolean
+) returns void as $$
+declare
+  K_FACTOR constant integer := 32;
+  rating_winner integer;
+  rating_loser integer;
+  played_winner integer;
+  played_loser integer;
+  won_winner integer;
+  lost_loser integer;
+  draw_winner integer;
+  draw_loser integer;
+  expected_winner numeric;
+  expected_loser numeric;
+  score_winner numeric;
+  score_loser numeric;
+  new_rating_winner integer;
+  new_rating_loser integer;
+begin
+  -- Get winner data
+  select points, played, won, lost, draw
+  into rating_winner, played_winner, won_winner, lost_loser, draw_winner
+  from players where id = winner_id;
+
+  -- Get loser data
+  select points, played, won, lost, draw
+  into rating_loser, played_loser, won_winner, lost_loser, draw_loser
+  from players where id = loser_id;
+
+  if rating_winner is null or rating_loser is null then
+    raise exception 'One or both players not found';
+  end if;
+
+  -- Elo expected scores
+  expected_winner := 1 / (1 + power(10, (rating_loser - rating_winner) / 400.0));
+  expected_loser := 1 / (1 + power(10, (rating_winner - rating_loser) / 400.0));
+
+  -- Match result
+  if is_draw then
+    score_winner := 0.5;
+    score_loser := 0.5;
+  else
+    score_winner := 1;
+    score_loser := 0;
+  end if;
+
+  -- Calculate new ratings
+  new_rating_winner := round(rating_winner + K_FACTOR * (score_winner - expected_winner));
+  new_rating_loser := round(rating_loser + K_FACTOR * (score_loser - expected_loser));
+
+  -- Update winner
+  update players
+  set points = new_rating_winner,
+      played = played_winner + 1,
+      won = won_winner + (case when is_draw then 0 else 1 end),
+      draw = draw_winner + (case when is_draw then 1 else 0 end)
+  where id = winner_id;
+
+  -- Update loser
+  update players
+  set points = new_rating_loser,
+      played = played_loser + 1,
+      lost = lost_loser + (case when is_draw then 0 else 1 end),
+      draw = draw_loser + (case when is_draw then 1 else 0 end)
+  where id = loser_id;
+
+end;
+$$ language plpgsql security definer;

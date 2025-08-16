@@ -1,73 +1,88 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// --- IMPORTANT: REPLACE WITH YOUR SUPABASE DETAILS ---
-const SUPABASE_URL = 'https://dflgcunlcuiimafabbmy.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRmbGdjdW5sY3VpaW1hZmFiYm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2Njg2OTYsImV4cCI6MjA3MDI0NDY5Nn0.YK-QvBOjeIiGNZ2CZP8sPMcw_qS2uEJrH0u_2hEKlSM';
-// ----------------------------------------------------
+    const SUPABASE_URL = 'https://dflgcunlcuiimafabbmy.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRmbGdjdW5sY3VpaW1hZmFiYm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2Njg2OTYsImV4cCI6MjA3MDI0NDY5Nn0.YK-QvBOjeIiGNZ2CZP8sPMcw_qS2uEJrH0u_2hEKlSM';
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const loadingSpinner = document.getElementById('loading-spinner');
-const rankingsTable = document.getElementById('rankings-table');
-const rankingsBody = document.getElementById('rankings-body');
+    let players = [];
+    let currentSort = { column: "points", direction: "desc" };
 
-async function fetchAndDisplayRankings() {
-    try {
-        // Fetch all players, ordered by points descending
-        const { data: players, error } = await supabase
-            .from('players')
-            .select('*')
-            .order('points', { ascending: false });
+    async function fetchPlayers() {
+      const { data, error } = await supabase
+        .from("players")
+        .select("*");
 
-        if (error) throw error;
-
-        // Clear previous entries
-        rankingsBody.innerHTML = '';
-
-        // Populate the table
-        players.forEach((player, index) => {
-            const rank = index + 1;
-            const row = document.createElement('tr');
-            
-            // Add special classes for top ranks
-            if (rank <= 3) {
-                row.classList.add(`rank-${rank}`);
-            }
-
-            row.innerHTML = `
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${rank}</td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0 h-10 w-10">
-                            <img class="h-10 w-10 rounded-full object-cover" src="${player.photo_url}" alt="${player.name}">
-                        </div>
-                        <div class="ml-4">
-                            <div class="text-sm font-medium text-gray-900">${player.name}</div>
-                        </div>
-                    </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-semibold">${player.points}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${player.won}-${player.lost}-${player.draw}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${player.played}</td>
-            `;
-            rankingsBody.appendChild(row);
-        });
-
-        // Hide spinner and show table
-        loadingSpinner.style.display = 'none';
-        rankingsTable.classList.remove('hidden');
-
-    } catch (error) {
-        console.error('Error fetching rankings:', error);
-        loadingSpinner.innerHTML = `<p class="text-red-500">Could not load rankings. ${error.message}</p>`;
-    }
-}
-
-// --- INITIAL LOAD ---
-document.addEventListener('DOMContentLoaded', () => {
-    if (SUPABASE_URL === 'YOUR_SUPABASE_URL') {
-        alert('Please update the SUPABASE_URL and SUPABASE_ANON_KEY in the script!');
+      if (error) {
+        console.error("Error fetching players:", error);
         return;
+      }
+
+      players = data || [];
+      renderTable();
     }
-    fetchAndDisplayRankings();
-});
+
+    function renderTable() {
+      let filtered = players.filter(player =>
+        player.name.toLowerCase().includes(
+          document.getElementById("searchInput").value.toLowerCase()
+        )
+      );
+
+      filtered.sort((a, b) => {
+        let col = currentSort.column;
+        let dir = currentSort.direction === "asc" ? 1 : -1;
+
+        if (col === "name") {
+          return a.name.localeCompare(b.name) * dir;
+        } else if (col === "position") {
+          return (players.indexOf(a) - players.indexOf(b)) * dir;
+        } else {
+          return (a[col] - b[col]) * dir;
+        }
+      });
+
+      const rankingsBody = document.getElementById("rankingsBody");
+      rankingsBody.innerHTML = "";
+
+      filtered
+        .sort((a, b) => b.points - a.points) // for position rank
+        .forEach((player, index) => {
+          const row = document.createElement("tr");
+
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td><img src="${player.photo_url}" alt="${player.name}" width="40"></td>
+            <td>${player.name}</td>
+            <td>${player.points}</td>
+            <td>${player.played}</td>
+            <td>${player.won}</td>
+            <td>${player.lost}</td>
+            <td>${player.draw}</td>
+          `;
+
+          rankingsBody.appendChild(row);
+        });
+    }
+
+    // Sorting
+    document.querySelectorAll("th[data-sort]").forEach(th => {
+      th.addEventListener("click", () => {
+        const column = th.getAttribute("data-sort");
+
+        if (currentSort.column === column) {
+          currentSort.direction = currentSort.direction === "asc" ? "desc" : "asc";
+        } else {
+          currentSort.column = column;
+          currentSort.direction = "asc";
+        }
+
+        renderTable();
+      });
+    });
+
+    // Search
+    document.getElementById("searchInput").addEventListener("input", renderTable);
+
+    // Initial Fetch
+    fetchPlayers();

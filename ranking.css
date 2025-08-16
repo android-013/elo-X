@@ -1,24 +1,114 @@
-/* Import Tailwind CSS */
-@import "https://cdn.tailwindcss.com";
 
-/* Custom Styles */
-body {
-    font-family: 'Inter', sans-serif;
-}
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #1e1e2f;
+    color: #fff;
+    padding: 20px;
+    margin: 0;
+  }
 
-/* Style for the top 3 players */
-.rank-1, .rank-2, .rank-3 {
-    font-weight: 600; /* semibold */
-}
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+  }
 
-.rank-1 td:first-child {
-    color: #d4af37; /* Gold */
-}
+  #searchInput {
+    display: block;
+    margin: 0 auto 20px auto;
+    padding: 10px 15px;
+    font-size: 1rem;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+  }
 
-.rank-2 td:first-child {
-    color: #c0c0c0; /* Silver */
-}
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    max-width: 1000px;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    border-radius: 10px;
+    overflow: hidden;
+  }
 
-.rank-3 td:first-child {
-    color: #cd7f32; /* Bronze */
-}
+  thead {
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+  }
+
+  th {
+    padding: 12px 15px;
+    text-align: left;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 600;
+  }
+
+  th:hover {
+    background: rgba(255,255,255,0.1);
+  }
+
+  tbody tr {
+    transition: background 0.2s;
+  }
+
+  tbody tr:nth-child(even) {
+    background: rgba(255,255,255,0.05);
+  }
+
+  tbody tr:hover {
+    background: rgba(255,255,255,0.15);
+  }
+
+  td {
+    padding: 10px 15px;
+    vertical-align: middle;
+  }
+
+  td img {
+    border-radius: 50%;
+    display: block;
+    max-width: 40px;
+    height: 40px;
+    object-fit: cover;
+  }
+
+  @media screen and (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+
+    thead {
+      display: none;
+    }
+
+    tbody tr {
+      margin-bottom: 15px;
+      background: #2a2a3d;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    td {
+      padding: 8px;
+      text-align: right;
+      position: relative;
+    }
+
+    td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 10px;
+      width: 50%;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    td img {
+      margin: 0 auto 5px auto;
+    }
+  }
+

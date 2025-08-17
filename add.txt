@@ -1,0 +1,13 @@
+-- Function to add a new player
+create or replace function add_new_player(
+    player_name text,
+    player_photo text
+)
+returns void
+language plpgsql
+as $$
+begin
+    insert into players (name, photo_url, points, played, won, lost, draw)
+    values (player_name, player_photo, 1400, 0, 0, 0, 0);
+end;
+$$;
